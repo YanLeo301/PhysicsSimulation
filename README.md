@@ -9,10 +9,16 @@ A simple 2D physics simulation with collisions and gravity.
 Open 'PhysicsSimulation.sln' and press Ctrl + F5 to build and run
 
 ### Linux
-`sudo apt install libraylib-dev g++ -std=c++14 main.cpp -o PhysicsSimulation -lraylib -lGL -lpthread -ldl -lrt ./PhysicsSimulation`
+
+```
+sudo apt install libraylib-dev g++ -std=c++14 main.cpp -o PhysicsSimulation -lraylib -lGL -lpthread -ldl -lrt ./PhysicsSimulation
+```
 
 ### macOS (Homebrew)
-`brew install raylib clang++ -std=c++14 main.cpp -o PhysicsSimulation -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo ./PhysicsSimulation`
+
+```
+brew install raylib clang++ -std=c++14 main.cpp -o PhysicsSimulation -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo ./PhysicsSimulation
+```
 
 ### CMake
 
