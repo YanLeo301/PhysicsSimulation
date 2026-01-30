@@ -1,6 +1,8 @@
 # PhysicsSimulation
 A simple 2D physics simulation with collisions and gravity.
 
+![Demo](assets/demo.gif)
+
 ## How to build
 
 **Prerequisites:** C++14 compiler and [raylib](https://www.raylib.com/)
