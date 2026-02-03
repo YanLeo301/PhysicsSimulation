@@ -19,7 +19,10 @@ if (NOT raylib_FOUND)
 endif()
 
 # Create executable
-add_executable(PhysicsSimulation main.cpp)
+add_executable(PhysicsSimulation 
+    main.cpp
+    vec2Math.cpp
+)
 
 # Link raylib
 target_link_libraries(PhysicsSimulation raylib)

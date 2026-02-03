@@ -1,67 +1,20 @@
 #include <raylib.h>
 #include <vector>
-#include <iostream>
 #include <cmath>
+#include "vec2Math.h"
 
-const int screenWidth = 1280;
-const int screenHeight = 720;
+const int screenWidth = 1600;
+const int screenHeight = 900;
 const float gravity = 400.0f;
 const float elasticity = 0.8f;
 
-struct Ball {
+struct Ball 
+{
 	Vector2 position;
 	Vector2 velocity;
-	float radius; //bigger radius makes balls heavier (move less)
+	float radius;
 	Color color;
 };
-
-bool operator==(const Vector2& v1, const Vector2& v2)
-{
-	return (v1.x == v2.x) && (v1.y == v2.y);
-}
-
-Vector2 operator*(const Vector2& v, float f)
-{
-	return { v.x * f, v.y * f };
-}
-
-Vector2& operator*=(Vector2& v, float f)
-{
-	v.x *= f;
-	v.y *= f;
-	return v;
-}
-
-Vector2 operator/(const Vector2& v, float f)
-{
-	return { v.x / f, v.y / f };
-}
-
-Vector2& operator/=(Vector2& v, float f)
-{
-	v.x /= f;
-	v.y /= f;
-	return v;
-}
-
-Vector2 operator-(const Vector2& v1, const Vector2& v2)
-{
-	return { v1.x - v2.x, v1.y - v2.y };
-}
-
-Vector2& operator-=(Vector2& v1, const Vector2& v2)
-{
-	v1.x -= v2.x;
-	v1.y -= v2.y;
-	return v1;
-}
-
-Vector2& operator+=(Vector2& v1, const Vector2& v2)
-{
-	v1.x += v2.x;
-	v1.y += v2.y;
-	return v1;
-}
 
 int main()
 {
@@ -91,6 +44,18 @@ int main()
 			balls.push_back(b);
 		}
 
+		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+		{
+			for (size_t i = 0; i < balls.size(); i++)
+			{
+				float distance = sqrt((GetMousePosition().x - balls[i].position.x) * (GetMousePosition().x - balls[i].position.x) + (GetMousePosition().y - balls[i].position.y) * (GetMousePosition().y - balls[i].position.y));
+				if (distance <= balls[i].radius)
+				{
+					balls.erase(balls.begin() + i);
+				}
+			}
+		}
+
 		for (size_t i = 0; i < balls.size(); i++)
 		{
 			Ball& ball = balls[i];
@@ -98,47 +63,46 @@ int main()
 			ball.position.x += ball.velocity.x * GetFrameTime();
 			ball.position.y += ball.velocity.y * GetFrameTime();
 
-			//handle collisions with borders of window
+			//Handle collisions with borders of window
 
-			//collision with bottom
+			//Collision with bottom
 			if (ball.position.y + ball.radius >= screenHeight)
 			{
 				ball.position.y = screenHeight - ball.radius;
 				ball.velocity.y *= -elasticity;
 			}
-			//collision with right border
+			//Collision with right border
 			if (ball.position.x + ball.radius >= screenWidth)
 			{
 				ball.position.x = screenWidth - ball.radius;
 				ball.velocity.x *= -elasticity;
 			}
-			//collision with left border
+			//Collision with left border
 			if (ball.position.x - ball.radius <= 0)
 			{
 				ball.position.x = ball.radius;
 				ball.velocity.x *= -elasticity;
 			}
 
-			//handle collisions with other balls 
-			for (int j = i + 1; j < balls.size(); j++)
+			//Handle collisions with other balls 
+			for (size_t j = i + 1; j < balls.size(); j++)
 			{
 				Ball& other = balls[j];
-				Vector2 delta = { other.position.x - ball.position.x, other.position.y - ball.position.y }; //vector that connects the centers
-				float distance = sqrt(delta.x * delta.x + delta.y * delta.y); //length of vector that connects the centers (delta)
+				Vector2 delta = { other.position.x - ball.position.x, other.position.y - ball.position.y };
+				float distance = sqrt(delta.x * delta.x + delta.y * delta.y);
 				float overlap = ball.radius + other.radius - distance;
 
 				if (overlap > 0)
 				{
-					//seperate balls
+					//Seperate balls
 					Vector2 collisionNormal = delta / distance;
 					ball.position -= collisionNormal * overlap / 2;
 					other.position += collisionNormal * overlap / 2;
 
+					//Resolve collision
 					Vector2 relativeVelocity = other.velocity - ball.velocity;
 					float velocityAlongNormal = relativeVelocity.x * collisionNormal.x + relativeVelocity.y * collisionNormal.y;
 					float impulse = (-(1 + elasticity) * velocityAlongNormal) / (1 / ball.radius + 1 / other.radius);
-
-					//Newtons third law (equal and opposite reaction)
 					ball.velocity -= collisionNormal * (impulse / ball.radius);
 					other.velocity += collisionNormal * (impulse / other.radius);
 				}
@@ -148,10 +112,20 @@ int main()
 		BeginDrawing();
 		ClearBackground({ 31,31,31,255 });
 
-		int textWidth = MeasureText("Click to spawn a ball", 20);
-		DrawText("Click to spawn a ball", (screenWidth / 2 - textWidth / 2), 50, 20, WHITE);
+		//Show controls
+		int controlsText1Width = MeasureText("Left Click to spawn a ball", 20);
+		DrawText("Left Click to spawn a ball", (screenWidth / 2 - controlsText1Width / 2), 50, 20, WHITE);
+		int controlsText2Width = MeasureText("Right Click on a ball to remove it", 20);
+		DrawText("Right Click on a ball to remove it", (screenWidth / 2 - controlsText2Width / 2), 80, 20, WHITE);
+
+		//Show ball counter
+		const char* bCountText = TextFormat("Ball Counter: %d", (int)balls.size());
+		int bCountTextWidth = MeasureText(bCountText, 20);
+		DrawText(bCountText, (screenWidth - bCountTextWidth - 20), 20, 20, WHITE);
+		
 		DrawFPS(20, 20);
 
+		//Draw balls
 		for (const Ball& ball : balls)
 		{
 			DrawCircleV(ball.position, ball.radius, ball.color);
