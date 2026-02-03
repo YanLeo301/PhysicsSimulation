@@ -1,8 +1,6 @@
 # PhysicsSimulation
 A simple 2D physics simulation with collisions and gravity.
 
-![Demo](assets/demo.gif)
-
 ## How to build
 
 **Prerequisites:** C++14 compiler and [raylib](https://www.raylib.com/)
@@ -22,5 +20,5 @@ cmake --build .
 
 ## Controls
 
-Click left mouse button to spawn a ball with random radius and velocity.
+Click left mouse button to spawn a ball with random radius and velocity. \\
 Click right mouse button on a ball to remove it.
