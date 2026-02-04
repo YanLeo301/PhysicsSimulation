@@ -3,10 +3,7 @@ A simple 2D physics simulation with collisions and gravity.
 
 ## How to build
 
-**Prerequisites:** C++14 compiler and [raylib](https://www.raylib.com/)
-
-### Windows (Visual Studio)
-Open 'PhysicsSimulation.sln' and press Ctrl + F5 to build and run
+**You need:** C++14 compiler and CMake 3.14
 
 ### CMake
 

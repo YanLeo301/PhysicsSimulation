@@ -33,7 +33,7 @@ int main()
 				(float)GetRandomValue(-200,200),
 				(float)GetRandomValue(-200,0)
 			};
-			b.radius = GetRandomValue(10, 70);
+			b.radius = (float)GetRandomValue(10, 70);
 			b.color =
 			{
 				(unsigned char)GetRandomValue(50,255),

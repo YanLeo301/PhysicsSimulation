@@ -12,6 +12,10 @@ x86/
 *.suo
 *.userosscache
 *.sln.docstates
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 
 # Compiled files
 *.exe
